@@ -1,15 +1,38 @@
 import { styled } from "styled-components";
 
 interface Image {
-  image: string;
-  title: string;
+  image?: string;
+  title?: string;
+  errorMessage?: string;
+  total?: number;
+  about?: boolean;
+  onKeyDown: (event: KeyboardEvent) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Inputs = ({ image, title }: Image) => {
+const Inputs = ({
+  image,
+  title,
+  onChange,
+  errorMessage,
+  total,
+  onKeyDown,
+}: Image) => {
   return (
     <Div>
-      <label htmlFor={title}>{title}</label> <br />
-      <input type="number" name={title} id={title} placeholder="0" />
+      <div>
+        <label htmlFor={title}>{title}</label>
+        {total === 0 && <h3>{errorMessage}</h3>}
+      </div>
+      <Input
+        about={total === 0}
+        onChange={onChange}
+        type="number"
+        name={title}
+        id={title}
+        placeholder="0"
+        onKeyDown={onKeyDown}
+      />
       <img src={image} alt="icon" />
     </Div>
   );
@@ -26,12 +49,18 @@ const Div = styled.div`
     left: 1.7rem;
     bottom: 1.7rem;
   }
-
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+  h3 {
+    color: #e17457;
+    font-size: 1.6rem;
+  }
   label {
     color: #5e7a7d;
     font-size: 1.6rem;
   }
-
   input {
     color: #00474b;
     font-size: 2.4rem;
@@ -49,7 +78,7 @@ const Div = styled.div`
     opacity: 0.5;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 840px) {
     input {
       max-width: 37.9rem;
     }
@@ -63,5 +92,14 @@ const Div = styled.div`
     input::-webkit-outer-spin-button {
       -webkit-appearance: none;
     }
+    input:focus {
+      border: 0.18rem solid #26c2ae;
+    }
+    h3 {
+      margin-right: 2.5rem;
+    }
   }
+`;
+const Input = styled.input<Image>`
+  border: ${(props) => (props.about ? "0.18rem solid #E17052" : "")}!important;
 `;

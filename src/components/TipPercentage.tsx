@@ -1,16 +1,46 @@
 import { styled } from "styled-components";
 
-const TipPercentage = () => {
+interface Setter {
+  setShowBill: (percentage: string) => void;
+  setShowTotal: (percentage: string) => void;
+  bill: number;
+  total: number;
+}
+
+const TipPercentage = ({ setShowBill, setShowTotal, bill, total }: Setter) => {
   const percentageList = [5, 10, 15, 25, 50];
+
+  const calculate = (unit: number) => {
+    if (bill !== 0 && total !== 0) {
+      setShowBill(((bill / total) * (unit / 100)).toString());
+
+      setShowTotal(((bill / total) * (unit / 100) + bill / total).toString());
+    }
+  };
 
   return (
     <Div>
       <h2>Select Tip %</h2>
       <div>
         {percentageList.map((percentage) => (
-          <button key={percentage}>{percentage}%</button>
+          <button
+            onClick={() => {
+              calculate(percentage);
+            }}
+            key={percentage}
+          >
+            {percentage}%
+          </button>
         ))}
-        <input type="number" placeholder="Custom" />
+        <input
+          onChange={(e) => {
+            if (e.target.value !== "") {
+              calculate(e.target.valueAsNumber);
+            }
+          }}
+          type="number"
+          placeholder="Custom"
+        />
       </div>
     </Div>
   );
@@ -60,10 +90,11 @@ const Div = styled.div`
     color: #547878;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 840px) {
     margin-bottom: 4rem;
     button {
       max-width: 11.7rem;
+      cursor: pointer;
     }
     input {
       max-width: 11.8rem;
@@ -77,6 +108,13 @@ const Div = styled.div`
     input::-webkit-inner-spin-button,
     input::-webkit-outer-spin-button {
       -webkit-appearance: none;
+    }
+    input:focus {
+      border: 0.18rem solid #26c2ae;
+    }
+    button:hover {
+      background-color: #9fe8df;
+      color: #00474b;
     }
   }
 `;

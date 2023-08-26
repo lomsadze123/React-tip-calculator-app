@@ -1,18 +1,30 @@
 import { styled } from "styled-components";
 
 interface ResultType {
-  title: string;
-  number: number;
+  title?: string;
+  number?: number;
+  showBill?: number;
+  showTotal?: number;
+  bill?: string;
+  total?: string;
 }
 
-const Result = () => {
+interface ButtonProps {
+  about?: boolean;
+}
+
+const Result = ({ showBill, showTotal, bill, total }: ResultType) => {
+  const isDisabled = bill === "" && total === "";
+
   return (
     <Div>
       <article>
-        <ResultComponent title="Tip Amount" number={0} />
-        <ResultComponent title="Total" number={0} />
+        <ResultComponent title="Tip Amount" number={showBill} />
+        <ResultComponent title="Total" number={showTotal} />
       </article>
-      <button type="submit">reset</button>
+      <Button about={isDisabled} disabled={isDisabled} type="submit">
+        reset
+      </Button>
     </Div>
   );
 };
@@ -26,7 +38,7 @@ const ResultComponent = ({ title, number }: ResultType) => {
         <h3>{title}</h3>
         <p>/ person</p>
       </div>
-      <h2>${number.toFixed(2)}</h2>
+      <h2>${number?.toFixed(2)}</h2>
     </DivComponent>
   );
 };
@@ -56,7 +68,6 @@ const Div = styled.form`
   button {
     width: 100%;
     border: 0;
-    background-color: #26c2ae;
     border-radius: 0.5rem;
     font-size: 2rem;
     color: #00474b;
@@ -65,7 +76,7 @@ const Div = styled.form`
     line-height: 2.962rem;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 840px) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -81,6 +92,14 @@ const Div = styled.form`
     div + div {
       margin: 2.5rem 0 0 0;
     }
+
+    button {
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #9fe8df;
+      opacity: 1;
+    }
   }
 `;
 
@@ -88,4 +107,9 @@ const DivComponent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const Button = styled.button<ButtonProps>`
+  background-color: ${(props) => (props.about ? "#0d686d" : "#26C2AE")};
+  opacity: ${(props) => (props.about ? 0.5 : 1)};
 `;

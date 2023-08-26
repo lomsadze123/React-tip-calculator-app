@@ -29,7 +29,7 @@ const Body = styled.div`
     width: 100%;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 840px) {
     gap: 8.79rem;
   }
 `;
